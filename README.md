@@ -8,7 +8,7 @@ Tested on Zabbix 4.0.9 with debian 9.
 Perl + Perl Library JSON and File::Basename
 
 ## Installation
-1. copy the nakivo.pl file to the zabbix external scripts folder
+1. copy the nakivo.pl file to the zabbix external scripts folder and allow execution (chmod +x nakivo.pl)
 2. set correct value for NAKIVO_USER and NAKIVO_PWD variable in nakivo.pl (line 22 and line 23)
 3. get your nakivo cli.sh and cli.jar based on https://helpcenter.nakivo.com/display/NH/Using+Command+Line+Interface and copy it to the zabbix external scripts folder
 4. import zbx_export_templates_nakivo.xml
@@ -19,17 +19,17 @@ Perl + Perl Library JSON and File::Basename
 3. have fun
 
 ## Tests
-> nakivo.pl <IP> --job-list
-> {
->        "data":[
->
->        {
->                "{#ID}":"35",
->                "{#NAME}":"VM Backup"
->        }
->
->        ]
-> }
+nakivo.pl <IP> --job-list
+{
+        "data":[
+
+        {
+                "{#ID}":"35",
+                "{#NAME}":"VM Backup"
+        }
+
+        ]
+}
 
 
 ## Notice
