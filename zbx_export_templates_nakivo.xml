@@ -29,7 +29,7 @@
                     <type>10</type>
                     <snmp_community/>
                     <snmp_oid/>
-                    <key>nakivo.pl[{HOST.CONN},&quot;--job-list&quot;]</key>
+                    <key>nakivo.pl[{$USERNAME},{$PASSWORD},{HOST.CONN},&quot;--job-list&quot;]</key>
                     <delay>60m</delay>
                     <status>0</status>
                     <allowed_hosts/>
@@ -61,7 +61,7 @@
                             <type>10</type>
                             <snmp_community/>
                             <snmp_oid/>
-                            <key>nakivo.pl[{HOST.CONN},&quot;--job-info&quot;, &quot;{#ID}&quot;,&quot;2&quot;]</key>
+                            <key>nakivo.pl[{$USERNAME},{$PASSWORD},{HOST.CONN},&quot;--job-info&quot;, &quot;{#ID}&quot;,&quot;2&quot;]</key>
                             <delay>5m</delay>
                             <history>90d</history>
                             <trends>0</trends>
@@ -121,7 +121,7 @@
                             <type>10</type>
                             <snmp_community/>
                             <snmp_oid/>
-                            <key>nakivo.pl[{HOST.CONN},&quot;--job-info&quot;, &quot;{#ID}&quot;,&quot;3&quot;]</key>
+                            <key>nakivo.pl[{$USERNAME},{$PASSWORD},{HOST.CONN},&quot;--job-info&quot;, &quot;{#ID}&quot;,&quot;3&quot;]</key>
                             <delay>5m</delay>
                             <history>90d</history>
                             <trends>0</trends>
@@ -179,7 +179,7 @@
                     </item_prototypes>
                     <trigger_prototypes>
                         <trigger_prototype>
-                            <expression>{Template Nakivo:nakivo.pl[{HOST.CONN},&quot;--job-info&quot;, &quot;{#ID}&quot;,&quot;3&quot;].iregexp(^successful$)}=0</expression>
+                            <expression>{Template Nakivo:nakivo.pl[{$USERNAME},{$PASSWORD},{HOST.CONN},&quot;--job-info&quot;, &quot;{#ID}&quot;,&quot;3&quot;].iregexp(^successful$)}=0</expression>
                             <recovery_mode>0</recovery_mode>
                             <recovery_expression/>
                             <name>Job[{#NAME}] failed</name>
