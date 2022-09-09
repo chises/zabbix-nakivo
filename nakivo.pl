@@ -11,14 +11,14 @@ sub printHelp {
 }
 
 #check if number of argument is valid
-if(@ARGV<2){
+if(@ARGV<4){
     printHelp();
     exit;
 }
-my $NAKIVO_USER = "user";
-my $NAKIVO_PWD = "password";
-my $NAKIVO_IP = $ARGV[0];
-my $NAKIVO_ACTION = $ARGV[1]; #valid Actions: "--job-list" "--job-info"
+my $NAKIVO_USER = $ARGV[0];
+my $NAKIVO_PWD = $ARGV[1];
+my $NAKIVO_IP = $ARGV[2];
+my $NAKIVO_ACTION = $ARGV[3]; #valid Actions: "--job-list" "--job-info"
 
 # Setup the Nakivo check script
 my $script_path = dirname(__FILE__);
@@ -59,14 +59,14 @@ if($NAKIVO_ACTION eq "--job-list"){
     print "}\n";
 }
 elsif($NAKIVO_ACTION eq "--job-info"){
-    if(@ARGV<3){
+    if(@ARGV<5){
         printHelp();
         exit;
     }
     my @columns;
-    my $NAKIVO_ID = $ARGV[2];
+    my $NAKIVO_ID = $ARGV[4];
     $cmd = "$script_to_check $NAKIVO_ACTION $NAKIVO_ID $script_auth" . ' 2>&1';
-    my $cmd_result = `$cmd`;
+    # my $cmd_result = `$cmd`;
     my @cmd_result = `$cmd`;
     shift(@cmd_result);
 
@@ -77,5 +77,5 @@ elsif($NAKIVO_ACTION eq "--job-info"){
         }
         push(@columns, @entryRow);
     }
-    print $columns[$ARGV[3]];
+    print $columns[$ARGV[5]];
 }
