@@ -1,0 +1,142 @@
+zabbix_export:
+  version: '6.2'
+  date: '2022-12-15T14:11:07Z'
+  template_groups:
+    -
+      uuid: 7df96b18c230490a9a0a9e2307226338
+      name: Templates
+    -
+      uuid: 8712e702d95b4f788a7a5c5603db991b
+      name: 'Templates ETC'
+  templates:
+    -
+      uuid: 875a3fb6c65641dcab7c2ee0f7d6dee8
+      template: 'Template Nakivo'
+      name: 'Template Nakivo'
+      groups:
+        -
+          name: Templates
+        -
+          name: 'Templates ETC'
+      items:
+        -
+          uuid: 432109dc11df47188aaf47c3ebe488c7
+          name: 'Get Nakivo Jobs'
+          type: EXTERNAL
+          key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD}]'
+          delay: 5m
+          trends: '0'
+          value_type: TEXT
+          preprocessing:
+            -
+              type: CSV_TO_JSON
+              parameters:
+                - ''
+                - ''
+                - '1'
+            -
+              type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - '3600'
+      discovery_rules:
+        -
+          uuid: 7a35ec791ba14a4c8fbb34bd1aa74aed
+          name: 'Nakivo Job Discover'
+          type: DEPENDENT
+          key: 'nakivo.sh[{HO},{$NAKIVOPASSWORD}]'
+          delay: '0'
+          item_prototypes:
+            -
+              uuid: adb48f19a9fe4414b1ceeb924661c5ff
+              name: 'Job [{#NAME}]: ID'
+              type: DEPENDENT
+              key: 'nakivo.jobs.id[{#ID}]'
+              delay: '0'
+              trends: '0'
+              value_type: CHAR
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.[?(@.ID==''{#ID}'')].ID.first()'
+              master_item:
+                key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD}]'
+            -
+              uuid: ebf0dc26e512458b9989f7b6f96c187a
+              name: 'Job [{#NAME}]: Last Run'
+              type: DEPENDENT
+              key: 'nakivo.jobs.lastrun[{#ID}]'
+              delay: '0'
+              trends: '0'
+              value_type: CHAR
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.[?(@.ID==''{#ID}'')].["Last run"].first()'
+              master_item:
+                key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD}]'
+              trigger_prototypes:
+                -
+                  uuid: d31cd0a4e2b846978368310c60a92f8a
+                  expression: 'last(/Template Nakivo/nakivo.jobs.lastrun[{#ID}])<>"Successful"'
+                  name: 'Job [{#NAME}] not successful'
+                  priority: AVERAGE
+            -
+              uuid: f3cc9de1237e41b4ac937cf6d90f4cfa
+              name: 'Job [{#NAME}]: Name'
+              type: DEPENDENT
+              key: 'nakivo.jobs.name[{#ID}]'
+              delay: '0'
+              trends: '0'
+              value_type: CHAR
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.[?(@.ID==''{#ID}'')].Name.first()'
+              master_item:
+                key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD}]'
+            -
+              uuid: 1cbaa8cf5bbb4d81aac46919a6e6220a
+              name: 'Job [{#NAME}]: State'
+              type: DEPENDENT
+              key: 'nakivo.jobs.state[{#ID}]'
+              delay: '0'
+              trends: '0'
+              value_type: CHAR
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.[?(@.ID==''{#ID}'')].State.first()'
+              master_item:
+                key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD}]'
+              trigger_prototypes:
+                -
+                  uuid: 9f11a44506c54fae86a489a17af2aac7
+                  expression: 'left(last(/Template Nakivo/nakivo.jobs.state[{#ID}]),7)="Running"'
+                  name: 'Job [{#NAME}] running'
+                  priority: INFO
+          master_item:
+            key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD}]'
+          preprocessing:
+            -
+              type: JAVASCRIPT
+              parameters:
+                - |
+                  var result = [];
+                  var obj = JSON.parse(value);
+                  obj.forEach(function (jobs) {
+                      result.push({"{#NAME}": jobs.Name, "{#ID}": jobs.ID});
+                  });
+                  
+                  return JSON.stringify(result);
+                  
+      macros:
+        -
+          macro: '{$NAKIVOPASSWORD}'
+          value: password
+        -
+          macro: '{$NAKIVOUSER}'
+          value: user

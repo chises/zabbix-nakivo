@@ -1,0 +1,1 @@
+/usr/lib/zabbix/externalscripts/cli.sh --job-list --host $1 --username $2 --password $3 | tr , . | sed -r 's/ *\| */,/g' | sed 's/^ *//;s/ *$//'
