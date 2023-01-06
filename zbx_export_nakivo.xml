@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>6.2</version>
-    <date>2022-12-15T14:11:18Z</date>
+    <date>2023-01-06T15:28:29Z</date>
     <template_groups>
         <template_group>
             <uuid>7df96b18c230490a9a0a9e2307226338</uuid>
@@ -30,7 +30,32 @@
                     <uuid>432109dc11df47188aaf47c3ebe488c7</uuid>
                     <name>Get Nakivo Jobs</name>
                     <type>EXTERNAL</type>
-                    <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD}]</key>
+                    <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;job&quot;]</key>
+                    <delay>5m</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <preprocessing>
+                        <step>
+                            <type>CSV_TO_JSON</type>
+                            <parameters>
+                                <parameter/>
+                                <parameter/>
+                                <parameter>1</parameter>
+                            </parameters>
+                        </step>
+                        <step>
+                            <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                            <parameters>
+                                <parameter>3600</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                </item>
+                <item>
+                    <uuid>b94fa96d13bd429d806fa69c6e474299</uuid>
+                    <name>Get Nakivo Repository</name>
+                    <type>EXTERNAL</type>
+                    <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;repository&quot;]</key>
                     <delay>5m</delay>
                     <trends>0</trends>
                     <value_type>TEXT</value_type>
@@ -57,7 +82,7 @@
                     <uuid>7a35ec791ba14a4c8fbb34bd1aa74aed</uuid>
                     <name>Nakivo Job Discover</name>
                     <type>DEPENDENT</type>
-                    <key>nakivo.sh[{HO},{$NAKIVOPASSWORD}]</key>
+                    <key>nakivo.sh[job]</key>
                     <delay>0</delay>
                     <item_prototypes>
                         <item_prototype>
@@ -66,8 +91,6 @@
                             <type>DEPENDENT</type>
                             <key>nakivo.jobs.id[{#ID}]</key>
                             <delay>0</delay>
-                            <trends>0</trends>
-                            <value_type>CHAR</value_type>
                             <preprocessing>
                                 <step>
                                     <type>JSONPATH</type>
@@ -77,7 +100,7 @@
                                 </step>
                             </preprocessing>
                             <master_item>
-                                <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD}]</key>
+                                <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;job&quot;]</key>
                             </master_item>
                         </item_prototype>
                         <item_prototype>
@@ -97,7 +120,7 @@
                                 </step>
                             </preprocessing>
                             <master_item>
-                                <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD}]</key>
+                                <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;job&quot;]</key>
                             </master_item>
                             <trigger_prototypes>
                                 <trigger_prototype>
@@ -125,7 +148,7 @@
                                 </step>
                             </preprocessing>
                             <master_item>
-                                <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD}]</key>
+                                <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;job&quot;]</key>
                             </master_item>
                         </item_prototype>
                         <item_prototype>
@@ -145,7 +168,7 @@
                                 </step>
                             </preprocessing>
                             <master_item>
-                                <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD}]</key>
+                                <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;job&quot;]</key>
                             </master_item>
                             <trigger_prototypes>
                                 <trigger_prototype>
@@ -158,7 +181,7 @@
                         </item_prototype>
                     </item_prototypes>
                     <master_item>
-                        <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD}]</key>
+                        <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;job&quot;]</key>
                     </master_item>
                     <preprocessing>
                         <step>
@@ -176,7 +199,207 @@ return JSON.stringify(result);
                         </step>
                     </preprocessing>
                 </discovery_rule>
+                <discovery_rule>
+                    <uuid>7c874585dbdf48989b40bbb1b70d28b3</uuid>
+                    <name>Nakivo Repository Discover</name>
+                    <type>DEPENDENT</type>
+                    <key>nakivo.sh[repository]</key>
+                    <delay>0</delay>
+                    <item_prototypes>
+                        <item_prototype>
+                            <uuid>9ac08c5511524a01a17b603ffb54ae0c</uuid>
+                            <name>Repository [{#NAME}]: Attached</name>
+                            <type>DEPENDENT</type>
+                            <key>nakivo.repository.attached[{#ID}]</key>
+                            <delay>0</delay>
+                            <history>30d</history>
+                            <trends>0</trends>
+                            <value_type>CHAR</value_type>
+                            <preprocessing>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <parameters>
+                                        <parameter>$.[?(@.ID=='{#ID}')].[&quot;Attached&quot;].first()</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;repository&quot;]</key>
+                            </master_item>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>d057fee3faaf4e3294bd16d7e294b904</uuid>
+                            <name>Repository [{#NAME}]: Consistent</name>
+                            <type>DEPENDENT</type>
+                            <key>nakivo.repository.consistent[{#ID}]</key>
+                            <delay>0</delay>
+                            <history>30d</history>
+                            <trends>0</trends>
+                            <value_type>CHAR</value_type>
+                            <preprocessing>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <parameters>
+                                        <parameter>$.[?(@.ID=='{#ID}')].[&quot;Consistent&quot;].first()</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;repository&quot;]</key>
+                            </master_item>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>06247da4ea6f457dac8dc6cf9b5a70c3</uuid>
+                            <name>Repository [{#NAME}]: ID</name>
+                            <type>DEPENDENT</type>
+                            <key>nakivo.repository.id[{#ID}]</key>
+                            <delay>0</delay>
+                            <history>7d</history>
+                            <trends>0</trends>
+                            <preprocessing>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <parameters>
+                                        <parameter>$.[?(@.ID=='{#ID}')].ID.first()</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;repository&quot;]</key>
+                            </master_item>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>4201119b949e49ffb8c07825d9804180</uuid>
+                            <name>Repository [{#NAME}]: State</name>
+                            <type>DEPENDENT</type>
+                            <key>nakivo.repository.state[{#ID}]</key>
+                            <delay>0</delay>
+                            <history>30d</history>
+                            <trends>0</trends>
+                            <value_type>CHAR</value_type>
+                            <preprocessing>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <parameters>
+                                        <parameter>$.[?(@.ID=='{#ID}')].[&quot;State&quot;].first()</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;repository&quot;]</key>
+                            </master_item>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>fc11e60b3e444cdd8f9dd2f27fefdf24</uuid>
+                            <name>Repository [{#NAME}]: Status</name>
+                            <type>DEPENDENT</type>
+                            <key>nakivo.repository.status[{#ID}]</key>
+                            <delay>0</delay>
+                            <history>30d</history>
+                            <trends>0</trends>
+                            <value_type>CHAR</value_type>
+                            <preprocessing>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <parameters>
+                                        <parameter>$.[?(@.ID=='{#ID}')].[&quot;Status&quot;].first()</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;repository&quot;]</key>
+                            </master_item>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>ebd4b52337e44c99ac879c3a94899434</uuid>
+                            <name>Repository [{#NAME}]: Transporter</name>
+                            <type>DEPENDENT</type>
+                            <key>nakivo.repository.transporter[{#ID}]</key>
+                            <delay>0</delay>
+                            <history>30d</history>
+                            <trends>0</trends>
+                            <value_type>CHAR</value_type>
+                            <preprocessing>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <parameters>
+                                        <parameter>$.[?(@.ID=='{#ID}')].[&quot;Transporter&quot;].first()</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;repository&quot;]</key>
+                            </master_item>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>5b7db6e04bc44b73b3c0de0b9365f0d8</uuid>
+                            <name>Repository [{#NAME}]: Type</name>
+                            <type>DEPENDENT</type>
+                            <key>nakivo.repository.type[{#ID}]</key>
+                            <delay>0</delay>
+                            <history>30d</history>
+                            <trends>0</trends>
+                            <value_type>CHAR</value_type>
+                            <preprocessing>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <parameters>
+                                        <parameter>$.[?(@.ID=='{#ID}')].[&quot;Type&quot;].first()</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;repository&quot;]</key>
+                            </master_item>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>3e231eba1b8a42e0ba6c9ca1903d7c34</uuid>
+                            <name>Repository [{#NAME}]: Usage Data</name>
+                            <type>DEPENDENT</type>
+                            <key>nakivo.repository.usagedata[{#ID}]</key>
+                            <delay>0</delay>
+                            <history>30d</history>
+                            <trends>0</trends>
+                            <value_type>CHAR</value_type>
+                            <preprocessing>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <parameters>
+                                        <parameter>$.[?(@.ID=='{#ID}')].[&quot;Usagedata&quot;].first()</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;repository&quot;]</key>
+                            </master_item>
+                        </item_prototype>
+                    </item_prototypes>
+                    <master_item>
+                        <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;repository&quot;]</key>
+                    </master_item>
+                    <preprocessing>
+                        <step>
+                            <type>JAVASCRIPT</type>
+                            <parameters>
+                                <parameter>var result = [];
+var obj = JSON.parse(value);
+obj.forEach(function (repository) {
+    result.push({&quot;{#NAME}&quot;: repository.Name, &quot;{#ID}&quot;: repository.ID});
+});
+
+return JSON.stringify(result);
+</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                </discovery_rule>
             </discovery_rules>
+            <tags>
+                <tag>
+                    <tag>application</tag>
+                    <value>nakivo</value>
+                </tag>
+            </tags>
             <macros>
                 <macro>
                     <macro>{$NAKIVOPASSWORD}</macro>

@@ -1,6 +1,6 @@
 zabbix_export:
   version: '6.2'
-  date: '2022-12-15T14:11:07Z'
+  date: '2023-01-06T15:28:15Z'
   template_groups:
     -
       uuid: 7df96b18c230490a9a0a9e2307226338
@@ -23,7 +23,26 @@ zabbix_export:
           uuid: 432109dc11df47188aaf47c3ebe488c7
           name: 'Get Nakivo Jobs'
           type: EXTERNAL
-          key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD}]'
+          key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"job"]'
+          delay: 5m
+          trends: '0'
+          value_type: TEXT
+          preprocessing:
+            -
+              type: CSV_TO_JSON
+              parameters:
+                - ''
+                - ''
+                - '1'
+            -
+              type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - '3600'
+        -
+          uuid: b94fa96d13bd429d806fa69c6e474299
+          name: 'Get Nakivo Repository'
+          type: EXTERNAL
+          key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"repository"]'
           delay: 5m
           trends: '0'
           value_type: TEXT
@@ -43,7 +62,7 @@ zabbix_export:
           uuid: 7a35ec791ba14a4c8fbb34bd1aa74aed
           name: 'Nakivo Job Discover'
           type: DEPENDENT
-          key: 'nakivo.sh[{HO},{$NAKIVOPASSWORD}]'
+          key: 'nakivo.sh[job]'
           delay: '0'
           item_prototypes:
             -
@@ -52,15 +71,13 @@ zabbix_export:
               type: DEPENDENT
               key: 'nakivo.jobs.id[{#ID}]'
               delay: '0'
-              trends: '0'
-              value_type: CHAR
               preprocessing:
                 -
                   type: JSONPATH
                   parameters:
                     - '$.[?(@.ID==''{#ID}'')].ID.first()'
               master_item:
-                key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD}]'
+                key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"job"]'
             -
               uuid: ebf0dc26e512458b9989f7b6f96c187a
               name: 'Job [{#NAME}]: Last Run'
@@ -75,7 +92,7 @@ zabbix_export:
                   parameters:
                     - '$.[?(@.ID==''{#ID}'')].["Last run"].first()'
               master_item:
-                key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD}]'
+                key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"job"]'
               trigger_prototypes:
                 -
                   uuid: d31cd0a4e2b846978368310c60a92f8a
@@ -96,7 +113,7 @@ zabbix_export:
                   parameters:
                     - '$.[?(@.ID==''{#ID}'')].Name.first()'
               master_item:
-                key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD}]'
+                key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"job"]'
             -
               uuid: 1cbaa8cf5bbb4d81aac46919a6e6220a
               name: 'Job [{#NAME}]: State'
@@ -111,7 +128,7 @@ zabbix_export:
                   parameters:
                     - '$.[?(@.ID==''{#ID}'')].State.first()'
               master_item:
-                key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD}]'
+                key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"job"]'
               trigger_prototypes:
                 -
                   uuid: 9f11a44506c54fae86a489a17af2aac7
@@ -119,7 +136,7 @@ zabbix_export:
                   name: 'Job [{#NAME}] running'
                   priority: INFO
           master_item:
-            key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD}]'
+            key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"job"]'
           preprocessing:
             -
               type: JAVASCRIPT
@@ -133,6 +150,159 @@ zabbix_export:
                   
                   return JSON.stringify(result);
                   
+        -
+          uuid: 7c874585dbdf48989b40bbb1b70d28b3
+          name: 'Nakivo Repository Discover'
+          type: DEPENDENT
+          key: 'nakivo.sh[repository]'
+          delay: '0'
+          item_prototypes:
+            -
+              uuid: 9ac08c5511524a01a17b603ffb54ae0c
+              name: 'Repository [{#NAME}]: Attached'
+              type: DEPENDENT
+              key: 'nakivo.repository.attached[{#ID}]'
+              delay: '0'
+              history: 30d
+              trends: '0'
+              value_type: CHAR
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.[?(@.ID==''{#ID}'')].["Attached"].first()'
+              master_item:
+                key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"repository"]'
+            -
+              uuid: d057fee3faaf4e3294bd16d7e294b904
+              name: 'Repository [{#NAME}]: Consistent'
+              type: DEPENDENT
+              key: 'nakivo.repository.consistent[{#ID}]'
+              delay: '0'
+              history: 30d
+              trends: '0'
+              value_type: CHAR
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.[?(@.ID==''{#ID}'')].["Consistent"].first()'
+              master_item:
+                key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"repository"]'
+            -
+              uuid: 06247da4ea6f457dac8dc6cf9b5a70c3
+              name: 'Repository [{#NAME}]: ID'
+              type: DEPENDENT
+              key: 'nakivo.repository.id[{#ID}]'
+              delay: '0'
+              history: 7d
+              trends: '0'
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.[?(@.ID==''{#ID}'')].ID.first()'
+              master_item:
+                key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"repository"]'
+            -
+              uuid: 4201119b949e49ffb8c07825d9804180
+              name: 'Repository [{#NAME}]: State'
+              type: DEPENDENT
+              key: 'nakivo.repository.state[{#ID}]'
+              delay: '0'
+              history: 30d
+              trends: '0'
+              value_type: CHAR
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.[?(@.ID==''{#ID}'')].["State"].first()'
+              master_item:
+                key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"repository"]'
+            -
+              uuid: fc11e60b3e444cdd8f9dd2f27fefdf24
+              name: 'Repository [{#NAME}]: Status'
+              type: DEPENDENT
+              key: 'nakivo.repository.status[{#ID}]'
+              delay: '0'
+              history: 30d
+              trends: '0'
+              value_type: CHAR
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.[?(@.ID==''{#ID}'')].["Status"].first()'
+              master_item:
+                key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"repository"]'
+            -
+              uuid: ebd4b52337e44c99ac879c3a94899434
+              name: 'Repository [{#NAME}]: Transporter'
+              type: DEPENDENT
+              key: 'nakivo.repository.transporter[{#ID}]'
+              delay: '0'
+              history: 30d
+              trends: '0'
+              value_type: CHAR
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.[?(@.ID==''{#ID}'')].["Transporter"].first()'
+              master_item:
+                key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"repository"]'
+            -
+              uuid: 5b7db6e04bc44b73b3c0de0b9365f0d8
+              name: 'Repository [{#NAME}]: Type'
+              type: DEPENDENT
+              key: 'nakivo.repository.type[{#ID}]'
+              delay: '0'
+              history: 30d
+              trends: '0'
+              value_type: CHAR
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.[?(@.ID==''{#ID}'')].["Type"].first()'
+              master_item:
+                key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"repository"]'
+            -
+              uuid: 3e231eba1b8a42e0ba6c9ca1903d7c34
+              name: 'Repository [{#NAME}]: Usage Data'
+              type: DEPENDENT
+              key: 'nakivo.repository.usagedata[{#ID}]'
+              delay: '0'
+              history: 30d
+              trends: '0'
+              value_type: CHAR
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.[?(@.ID==''{#ID}'')].["Usagedata"].first()'
+              master_item:
+                key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"repository"]'
+          master_item:
+            key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"repository"]'
+          preprocessing:
+            -
+              type: JAVASCRIPT
+              parameters:
+                - |
+                  var result = [];
+                  var obj = JSON.parse(value);
+                  obj.forEach(function (repository) {
+                      result.push({"{#NAME}": repository.Name, "{#ID}": repository.ID});
+                  });
+                  
+                  return JSON.stringify(result);
+                  
+      tags:
+        -
+          tag: application
+          value: nakivo
       macros:
         -
           macro: '{$NAKIVOPASSWORD}'
