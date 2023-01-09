@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>6.2</version>
-    <date>2023-01-06T15:28:29Z</date>
+    <date>2023-01-09T07:41:16Z</date>
     <template_groups>
         <template_group>
             <uuid>7df96b18c230490a9a0a9e2307226338</uuid>
@@ -226,6 +226,14 @@ return JSON.stringify(result);
                             <master_item>
                                 <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;repository&quot;]</key>
                             </master_item>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>1d158eab9e4d438393ef1c79d405c81f</uuid>
+                                    <expression>last(/Template Nakivo/nakivo.repository.attached[{#ID}])&lt;&gt;&quot;yes&quot;</expression>
+                                    <name>Repository [{#NAME}] not attached</name>
+                                    <priority>INFO</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
                         </item_prototype>
                         <item_prototype>
                             <uuid>d057fee3faaf4e3294bd16d7e294b904</uuid>
@@ -247,6 +255,14 @@ return JSON.stringify(result);
                             <master_item>
                                 <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;repository&quot;]</key>
                             </master_item>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>fa6c36bf54b848cebe2c8c7b3a1de141</uuid>
+                                    <expression>last(/Template Nakivo/nakivo.repository.consistent[{#ID}])&lt;&gt;&quot;yes&quot;</expression>
+                                    <name>Repository [{#NAME}] not consistent</name>
+                                    <priority>WARNING</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
                         </item_prototype>
                         <item_prototype>
                             <uuid>06247da4ea6f457dac8dc6cf9b5a70c3</uuid>
@@ -288,6 +304,14 @@ return JSON.stringify(result);
                             <master_item>
                                 <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;repository&quot;]</key>
                             </master_item>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>ef00cbac2fbc42b48546de321a48361d</uuid>
+                                    <expression>last(/Template Nakivo/nakivo.repository.state[{#ID}])&lt;&gt;&quot;OK&quot;</expression>
+                                    <name>Repository [{#NAME}] State {ITEM.LASTVALUE}</name>
+                                    <priority>AVERAGE</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
                         </item_prototype>
                         <item_prototype>
                             <uuid>fc11e60b3e444cdd8f9dd2f27fefdf24</uuid>
