@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>6.2</version>
-    <date>2023-01-09T07:41:16Z</date>
+    <date>2023-02-24T12:28:53Z</date>
     <template_groups>
         <template_group>
             <uuid>7df96b18c230490a9a0a9e2307226338</uuid>
@@ -30,7 +30,7 @@
                     <uuid>432109dc11df47188aaf47c3ebe488c7</uuid>
                     <name>Get Nakivo Jobs</name>
                     <type>EXTERNAL</type>
-                    <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;job&quot;]</key>
+                    <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;job&quot;,{$NAKIVOPORT}]</key>
                     <delay>5m</delay>
                     <trends>0</trends>
                     <value_type>TEXT</value_type>
@@ -55,7 +55,7 @@
                     <uuid>b94fa96d13bd429d806fa69c6e474299</uuid>
                     <name>Get Nakivo Repository</name>
                     <type>EXTERNAL</type>
-                    <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;repository&quot;]</key>
+                    <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;repository&quot;,{$NAKIVOPORT}]</key>
                     <delay>5m</delay>
                     <trends>0</trends>
                     <value_type>TEXT</value_type>
@@ -100,7 +100,7 @@
                                 </step>
                             </preprocessing>
                             <master_item>
-                                <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;job&quot;]</key>
+                                <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;job&quot;,{$NAKIVOPORT}]</key>
                             </master_item>
                         </item_prototype>
                         <item_prototype>
@@ -120,7 +120,7 @@
                                 </step>
                             </preprocessing>
                             <master_item>
-                                <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;job&quot;]</key>
+                                <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;job&quot;,{$NAKIVOPORT}]</key>
                             </master_item>
                             <trigger_prototypes>
                                 <trigger_prototype>
@@ -148,7 +148,7 @@
                                 </step>
                             </preprocessing>
                             <master_item>
-                                <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;job&quot;]</key>
+                                <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;job&quot;,{$NAKIVOPORT}]</key>
                             </master_item>
                         </item_prototype>
                         <item_prototype>
@@ -168,7 +168,7 @@
                                 </step>
                             </preprocessing>
                             <master_item>
-                                <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;job&quot;]</key>
+                                <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;job&quot;,{$NAKIVOPORT}]</key>
                             </master_item>
                             <trigger_prototypes>
                                 <trigger_prototype>
@@ -181,7 +181,7 @@
                         </item_prototype>
                     </item_prototypes>
                     <master_item>
-                        <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;job&quot;]</key>
+                        <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;job&quot;,{$NAKIVOPORT}]</key>
                     </master_item>
                     <preprocessing>
                         <step>
@@ -224,7 +224,7 @@ return JSON.stringify(result);
                                 </step>
                             </preprocessing>
                             <master_item>
-                                <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;repository&quot;]</key>
+                                <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;repository&quot;,{$NAKIVOPORT}]</key>
                             </master_item>
                             <trigger_prototypes>
                                 <trigger_prototype>
@@ -253,7 +253,7 @@ return JSON.stringify(result);
                                 </step>
                             </preprocessing>
                             <master_item>
-                                <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;repository&quot;]</key>
+                                <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;repository&quot;,{$NAKIVOPORT}]</key>
                             </master_item>
                             <trigger_prototypes>
                                 <trigger_prototype>
@@ -281,7 +281,7 @@ return JSON.stringify(result);
                                 </step>
                             </preprocessing>
                             <master_item>
-                                <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;repository&quot;]</key>
+                                <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;repository&quot;,{$NAKIVOPORT}]</key>
                             </master_item>
                         </item_prototype>
                         <item_prototype>
@@ -302,7 +302,7 @@ return JSON.stringify(result);
                                 </step>
                             </preprocessing>
                             <master_item>
-                                <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;repository&quot;]</key>
+                                <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;repository&quot;,{$NAKIVOPORT}]</key>
                             </master_item>
                             <trigger_prototypes>
                                 <trigger_prototype>
@@ -331,7 +331,7 @@ return JSON.stringify(result);
                                 </step>
                             </preprocessing>
                             <master_item>
-                                <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;repository&quot;]</key>
+                                <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;repository&quot;,{$NAKIVOPORT}]</key>
                             </master_item>
                         </item_prototype>
                         <item_prototype>
@@ -352,7 +352,7 @@ return JSON.stringify(result);
                                 </step>
                             </preprocessing>
                             <master_item>
-                                <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;repository&quot;]</key>
+                                <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;repository&quot;,{$NAKIVOPORT}]</key>
                             </master_item>
                         </item_prototype>
                         <item_prototype>
@@ -373,7 +373,7 @@ return JSON.stringify(result);
                                 </step>
                             </preprocessing>
                             <master_item>
-                                <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;repository&quot;]</key>
+                                <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;repository&quot;,{$NAKIVOPORT}]</key>
                             </master_item>
                         </item_prototype>
                         <item_prototype>
@@ -394,12 +394,12 @@ return JSON.stringify(result);
                                 </step>
                             </preprocessing>
                             <master_item>
-                                <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;repository&quot;]</key>
+                                <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;repository&quot;,{$NAKIVOPORT}]</key>
                             </master_item>
                         </item_prototype>
                     </item_prototypes>
                     <master_item>
-                        <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;repository&quot;]</key>
+                        <key>nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},&quot;repository&quot;,{$NAKIVOPORT}]</key>
                     </master_item>
                     <preprocessing>
                         <step>
@@ -428,6 +428,10 @@ return JSON.stringify(result);
                 <macro>
                     <macro>{$NAKIVOPASSWORD}</macro>
                     <value>password</value>
+                </macro>
+                <macro>
+                    <macro>{$NAKIVOPORT}</macro>
+                    <value>4443</value>
                 </macro>
                 <macro>
                     <macro>{$NAKIVOUSER}</macro>

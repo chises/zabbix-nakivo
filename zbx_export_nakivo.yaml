@@ -1,6 +1,6 @@
 zabbix_export:
   version: '6.2'
-  date: '2023-01-09T07:41:08Z'
+  date: '2023-02-24T12:28:24Z'
   template_groups:
     -
       uuid: 7df96b18c230490a9a0a9e2307226338
@@ -23,7 +23,7 @@ zabbix_export:
           uuid: 432109dc11df47188aaf47c3ebe488c7
           name: 'Get Nakivo Jobs'
           type: EXTERNAL
-          key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"job"]'
+          key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"job",{$NAKIVOPORT}]'
           delay: 5m
           trends: '0'
           value_type: TEXT
@@ -42,7 +42,7 @@ zabbix_export:
           uuid: b94fa96d13bd429d806fa69c6e474299
           name: 'Get Nakivo Repository'
           type: EXTERNAL
-          key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"repository"]'
+          key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"repository",{$NAKIVOPORT}]'
           delay: 5m
           trends: '0'
           value_type: TEXT
@@ -77,7 +77,7 @@ zabbix_export:
                   parameters:
                     - '$.[?(@.ID==''{#ID}'')].ID.first()'
               master_item:
-                key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"job"]'
+                key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"job",{$NAKIVOPORT}]'
             -
               uuid: ebf0dc26e512458b9989f7b6f96c187a
               name: 'Job [{#NAME}]: Last Run'
@@ -92,7 +92,7 @@ zabbix_export:
                   parameters:
                     - '$.[?(@.ID==''{#ID}'')].["Last run"].first()'
               master_item:
-                key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"job"]'
+                key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"job",{$NAKIVOPORT}]'
               trigger_prototypes:
                 -
                   uuid: d31cd0a4e2b846978368310c60a92f8a
@@ -113,7 +113,7 @@ zabbix_export:
                   parameters:
                     - '$.[?(@.ID==''{#ID}'')].Name.first()'
               master_item:
-                key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"job"]'
+                key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"job",{$NAKIVOPORT}]'
             -
               uuid: 1cbaa8cf5bbb4d81aac46919a6e6220a
               name: 'Job [{#NAME}]: State'
@@ -128,7 +128,7 @@ zabbix_export:
                   parameters:
                     - '$.[?(@.ID==''{#ID}'')].State.first()'
               master_item:
-                key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"job"]'
+                key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"job",{$NAKIVOPORT}]'
               trigger_prototypes:
                 -
                   uuid: 9f11a44506c54fae86a489a17af2aac7
@@ -136,7 +136,7 @@ zabbix_export:
                   name: 'Job [{#NAME}] running'
                   priority: INFO
           master_item:
-            key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"job"]'
+            key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"job",{$NAKIVOPORT}]'
           preprocessing:
             -
               type: JAVASCRIPT
@@ -172,7 +172,7 @@ zabbix_export:
                   parameters:
                     - '$.[?(@.ID==''{#ID}'')].["Attached"].first()'
               master_item:
-                key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"repository"]'
+                key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"repository",{$NAKIVOPORT}]'
               trigger_prototypes:
                 -
                   uuid: 1d158eab9e4d438393ef1c79d405c81f
@@ -194,7 +194,7 @@ zabbix_export:
                   parameters:
                     - '$.[?(@.ID==''{#ID}'')].["Consistent"].first()'
               master_item:
-                key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"repository"]'
+                key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"repository",{$NAKIVOPORT}]'
               trigger_prototypes:
                 -
                   uuid: fa6c36bf54b848cebe2c8c7b3a1de141
@@ -215,7 +215,7 @@ zabbix_export:
                   parameters:
                     - '$.[?(@.ID==''{#ID}'')].ID.first()'
               master_item:
-                key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"repository"]'
+                key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"repository",{$NAKIVOPORT}]'
             -
               uuid: 4201119b949e49ffb8c07825d9804180
               name: 'Repository [{#NAME}]: State'
@@ -231,7 +231,7 @@ zabbix_export:
                   parameters:
                     - '$.[?(@.ID==''{#ID}'')].["State"].first()'
               master_item:
-                key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"repository"]'
+                key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"repository",{$NAKIVOPORT}]'
               trigger_prototypes:
                 -
                   uuid: ef00cbac2fbc42b48546de321a48361d
@@ -253,7 +253,7 @@ zabbix_export:
                   parameters:
                     - '$.[?(@.ID==''{#ID}'')].["Status"].first()'
               master_item:
-                key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"repository"]'
+                key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"repository",{$NAKIVOPORT}]'
             -
               uuid: ebd4b52337e44c99ac879c3a94899434
               name: 'Repository [{#NAME}]: Transporter'
@@ -269,7 +269,7 @@ zabbix_export:
                   parameters:
                     - '$.[?(@.ID==''{#ID}'')].["Transporter"].first()'
               master_item:
-                key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"repository"]'
+                key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"repository",{$NAKIVOPORT}]'
             -
               uuid: 5b7db6e04bc44b73b3c0de0b9365f0d8
               name: 'Repository [{#NAME}]: Type'
@@ -285,7 +285,7 @@ zabbix_export:
                   parameters:
                     - '$.[?(@.ID==''{#ID}'')].["Type"].first()'
               master_item:
-                key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"repository"]'
+                key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"repository",{$NAKIVOPORT}]'
             -
               uuid: 3e231eba1b8a42e0ba6c9ca1903d7c34
               name: 'Repository [{#NAME}]: Usage Data'
@@ -301,9 +301,9 @@ zabbix_export:
                   parameters:
                     - '$.[?(@.ID==''{#ID}'')].["Usagedata"].first()'
               master_item:
-                key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"repository"]'
+                key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"repository",{$NAKIVOPORT}]'
           master_item:
-            key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"repository"]'
+            key: 'nakivo.sh[{HOST.CONN},{$NAKIVOUSER},{$NAKIVOPASSWORD},"repository",{$NAKIVOPORT}]'
           preprocessing:
             -
               type: JAVASCRIPT
@@ -325,6 +325,9 @@ zabbix_export:
         -
           macro: '{$NAKIVOPASSWORD}'
           value: password
+        -
+          macro: '{$NAKIVOPORT}'
+          value: '4443'
         -
           macro: '{$NAKIVOUSER}'
           value: user

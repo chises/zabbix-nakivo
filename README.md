@@ -34,7 +34,7 @@ apt install adoptopenjdk-8-hotspot -y
 5. increase script timeout on server/proxy to 10 seconds
 
 ## Testing
-Run nakivo.sh on the zabbix server or proxy with 3 paramters: nakivo server ip, nakivo user, nakivo password
+Run nakivo.sh on the zabbix server or proxy with 4 paramters: nakivo server ip, nakivo user, nakivo password, nakivo port
 ```
 /usr/lib/zabbix/externalscripts/nakivo.sh <IP> <user> '<password>'
 ID,Name,State,Last run
@@ -48,7 +48,8 @@ ID,Name,State,Last run
 ## Usage
 1. Create a host with agent interface ip pointing to naktivo server ip
 2. assign template "nakivo" to host
-3. adjust tempalte macros {$NAKIVOPASSWORD} and {$NAKIVOUSER} with a valid nakivo user
+3. adjust template macros {$NAKIVOPASSWORD} and {$NAKIVOUSER} with a valid nakivo user
+4. adjust template macro {$NAKIVOPORT} if nakivo port is not the default 4443
 
 
 ## Notice

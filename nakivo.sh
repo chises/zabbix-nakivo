@@ -1,9 +1,21 @@
-#! /bin/bash
+#!/bin/bash
+shell=$(readlink /proc/$$/exe)
+if ! [[ ${shell} =~ "bash" ]]; then
+        echo "No bash shell used"
+        exit;
+fi
 
-if [[ $4 == "job" ]]; then 
-	/usr/lib/zabbix/externalscripts/cli.sh --job-list --host $1 --username $2 --password $3 | tr , . | sed -r 's/ *\| */,/g' | sed 's/^ *//;s/ *$//'
-elif [[ $4 == "repository" ]]; then 
-	output=$(/usr/lib/zabbix/externalscripts/cli.sh --repository-list --host $1 --username $2 --password $3 | tr , . | sed -r 's/  +//g' | sed -r 's/ *: */:/g' | sed -e 's/^[ \t]*//')
+if [ -z "$5" ]; then
+        PORT=4443
+else
+        PORT=$5
+fi
+
+if [[ $4 == "job" ]]; then
+    /usr/lib/zabbix/externalscripts/cli.sh --job-list --host $1 --port $PORT --username $2 --password $3 | tr , . | sed -r 's/ *\| */,/g' | sed 's/^ *//;s/ *$//'
+elif [[ $4 == "repository" ]]; then
+    output=$(/usr/lib/zabbix/externalscripts/cli.sh --repository-list --host $1 --port $PORT --username $2 --password $3 | tr , . | sed -r 's/  +//g' | sed -r 's/ *: */:/g' | sed -e 's/^[ \t]*//')
+
 	FIELDS=""
 	REPOS=()
 	values=""
